@@ -1,63 +1,96 @@
-# 操哥抽水器
-最稳定的ETC/ETH/BTC中转托管软件(之一)<br />
-软件仅供学习参考，请勿用于其他目的，不承担任何责任<br />
-我这个不是老矿写的那个MinerProxy，老矿牛逼，我支持老矿，他的在[这里](https://github.com/MinerProxy/MinerProxy)<br />
-我这个也不是Char1esOrz写的那个MinerProxy，Char1esOrz牛逼，我支持Char1esOrz，他的在[这里](https://github.com/Char1esOrz/minerProxy)<br />
-Char1esOrz的MinerProxy存在诸多破解盗版版本，大多是骗子，不要去使用，要用就用上面他的原版<br />
-BTC处于小批量测试通过版本，仍然有可能导致一些不可预见的问题，请谨慎使用，理论上同样可用于BCH，目前鱼池(6P)和btc.com(40P)基本测试通过<br />
-BTC由于存在大量的大政奉还和难度不一情况，你实际得到的托管费会显著低于你设定的值，开发费也一样，优先保证客户低拒绝率
+## 下载
 
-# 开发费模型
-``` javascript
-//开发费百分比，taxPercent是你设置的抽水百分比
-var devPercent = 0;
-if (taxPercent <= 0.35) {
-    //小于等于0.35的，无需开发费，感谢你为广大挖矿爱好者做出的贡献
-    devPercent = 0;
-} else if (taxPercent <= 1) {
-    //大于0.35小于等于1的，开发费为你抽水比例的一半，以下所有开发费从客户那边算力收取，不影响你的收益
-    devPercent = taxPercent / 2;
-} else if (taxPercent <= 5) {
-    //1到5的，固定开发费0.5%
-    devPercent = 0.5;
-} else if (taxPercent <= 10) {
-    //5到10的，固定开发费1%
-    devPercent = 1;
-} else if (taxPercent <= 20) {
-    //10到20的，固定开发费2%
-    devPercent = 2;
-} else {
-    //20以上的，开发费线性到和你的比例相同为止，例如30的时候开发费为18%，40的时候为34%，50的时候为50%，50%最大，对半分，客户主动脉都要被你抽干了
-    devPercent = 48 / 30 * (taxPercent - 20) + 2;
+目录里的文件都要下载
+
+## 运行方式①
+
+打开CaoMinerTaxProxy.exe，记得关闭杀毒软件，不然可能误报
+打开后几个配置自己配置，配置完了点击启动
+每次启动系统都要重新运行一次
+
+## 运行方式②
+
+自行编辑config.json文件，注意//之后的都删掉，包括//
+``` json
+{
+  "enableLog":true, //启用日志记录
+
+  "ethPoolAddress": "eth.f2pool.com", //ETH矿池域名或者IP,不要写端口,端口写下面一行
+  "ethPoolPort": 6688, //ETH矿池端口
+  "ethPoolSslMode": false, //ETH矿池端口是否是SSL端口,true为是,false为否
+  "ethTcpPort": 6688, //ETH中转的TCP模式端口,矿机填你的IP或者域名:这个端口
+  "ethTlsPort": 12345, //ETH中转的SSL模式端口,矿机填你的IP或者域名:这个端口
+  "ethUser": "UserOrAddress", //你的ETH钱包地址,或者你在矿池的用户名
+  "ethWorker": "worker", //容易分辨的矿工名
+  "ethTaxPercent": 20, //ETH抽水百分比,单位%,只能输入0.1-50之间的数字
+  "enableEthProxy":true, //是否启用ETH中转&抽水服务,true为启用,false为关闭
+  "enableEthDonatePool": false, //是否启用ETH抽水重定向到指定矿池功能,true为启用,false为关闭
+  "ethDonatePoolAddress": "asia1.ethermine.org", //ETH抽水重定向矿池地址
+  "ethDonatePoolSslMode": true,  //ETH抽水重定向矿池的端口是否为SSL端口,true为是,false为否
+  "ethDonatePoolPort": 5555, //ETH抽水重定向矿池端口
+
+  "etcPoolAddress": "etc.f2pool.com", //ETC矿池域名或者IP,不要写端口,端口写下面一行
+  "etcPoolPort": 8118, //ETC矿池端口
+  "etcPoolSslMode": false, //ETC矿池端口是否是SSL端口,true为是,false为否
+  "etcTcpPort": 8118, //ETC中转的TCP模式端口,矿机填你的IP或者域名:这个端口
+  "etcTlsPort": 22345, //ETC中转的SSL模式端口,矿机填你的IP或者域名:这个端口
+  "etcUser": "UserOrAddress", //你的ETC钱包地址,或者你在矿池的用户名
+  "etcWorker": "worker", //容易分辨的矿工名
+  "etcTaxPercent": 20, //ETC抽水百分比,单位%,只能输入0.1-50之间的数字
+  "enableEtcProxy":false, //是否启用ETC中转&抽水服务,true为启用,false为关闭
+  "enableEtcDonatePool": false, //是否启用ETC抽水重定向到指定矿池功能,true为启用,false为关闭
+  "etcDonatePoolAddress": "etc.f2pool.com", //ETC抽水重定向矿池地址
+  "etcDonatePoolSslMode": false,  //ETC抽水重定向矿池的端口是否为SSL端口,true为是,false为否
+  "etcDonatePoolPort": 8118, //ETC抽水重定向矿池端口
+
+  "btcPoolAddress": "btc.f2pool.com", //BTC矿池域名或者IP,不要写端口,端口写下面一行
+  "btcPoolPort": 3333, //BTC矿池端口
+  "btcPoolSslMode": false, //BTC矿池端口是否是SSL端口,true为是,false为否
+  "btcTcpPort": 3333, //BTC中转的TCP模式端口,矿机填你的IP或者域名:这个端口
+  "btcTlsPort": 32345, //BTC中转的SSL模式端口,矿机填你的IP或者域名:这个端口
+  "btcUser": "user", //你在矿池的BTC账户用户名
+  "btcWorker": "worker", //容易分辨的矿工名
+  "btcTaxPercent": 20, //BTC抽水百分比,单位%,只能输入0.1-50之间的数字
+  "enableBtcProxy":false, //是否启用BTC中转&抽水服务,true为启用,false为关闭
+  
+  "httpLogPort":8080, //网页监控平台端口
+  "httpLogPassword":"caocaominer", //网页监控平台密码，不能为空
+  "enableHttpLog":true //是否启用网页监控平台
 }
-return devPercent;
 ```
 
-## 使用方法
-[Windows](https://github.com/CaoCaoMiner/CC-Miner-Tax-Proxy/tree/master/windows/)
+编辑好config.json文件,或者用CaoCaoMinerTaxProxy.exe配置好运行一次
+管理员权限打开命令行cmd
+切换到本目录
 
-[Linux](https://github.com/CaoCaoMiner/CC-Miner-Tax-Proxy/tree/master/linux/)(支持一键脚本安装)
+输入nssm install CMinerProxy
+点击Path后面的省略号，选择ccminertaxproxy.exe
+点击Install service
+重启系统即可自动启动
 
-所有版本均包含一个网页版的监控平台，可配置是否启用
 
-## 日你妈
-我的忧伤,你是煞笔<br />
-GuoT,你也是煞笔
+## 传参方式运行
+支持传参方式运行，方式如下
 
-## 捐赠
-觉得好用吗，捐赠一点吧，波场TRON地址，接受TRX或USDT捐赠，请选择TRC20<br />
-TVx7cEjnUELosah3N1M2NRZHTFmmDCaAfq
+``` command
+ccminertaxproxy.exe --ethPoolAddress=eth.f2pool.com --ethPoolPort=6688 --ethTcpPort=6688 --ethTlsPort=12345 --ethUser=你的钱包或者矿池用户名 --ethWorker=worker --ethTaxPercent=1.0 --enableEthProxy=true 
+```
+以上仅为范例，参数名字和上方JSON配置文件的参数名一致，参数为false的配置默认不用配进去，看不懂这个的不要用这种方式
 
-## 交流
-点击 [这里](https://t.me/+dKAS4JWlqDZlMjhl) 加入Telegram交流群
 
-## 其他
-请只设定足够平衡你支出的托管抽水比例，不要抽大动脉，做到可持续发展，托管时请一定告知客户存在托管费<br />
-ETH/ETC的归集功能由于跨池存在难度、协议不一致等原因，可能导致你抽到的算力过大/过小甚至于无法抽取等情况<br />
-4核心4G内存的搬瓦工，带机140台，总算力36G，CPU占用约5%，峰值10%，内存占用50M，测试15小时，90%机器稳定不掉<br />
-如果你经常掉线：<br />
-①第一检查挖矿软件配置及内核配置，是否设置超过多少分钟没有成功提交重启内核<br />
-②查看你服务器的硬件配置及软件带宽，配置过低可能导致转发性能不足，导致TCP重发及超时<br />
-③检查你服务器的网络是否占用超过60%以上，是的话加带宽<br />
-④检查你的抽水情况，如果一直没抽到，你的配置可能存在问题，导致各种断连情况，特别是蚂蚁、币安、OK、HIVE等池子<br />
-⑤尝试使用Linux一键脚本中的GOST转发功能
+## 注意
+
+千万不要忘记修改配置文件
+千万不要忘记修改配置文件
+千万不要忘记修改配置文件
+
+如修改了配置，修改后需要重新执行程序，或者去services.msc里重启CMinerProxy服务
+
+矿机无法连接的记得开防火墙，云服务商的还有对应的安全组，配置好了矿机连不上肯定是这俩原因，如何配置安全组自己Goodle去
+
+需要增加TCP连接数，[查看这里](https://m.kafan.cn/A/pv06e54mvd.html)
+
+
+## 关于SSL
+
+如果要用自己的域名证书，请直接替换key.pem和cer.pem文件，如果看不懂这句话就不要管，凤凰不用自己的域名证书无法使用SSL模式
