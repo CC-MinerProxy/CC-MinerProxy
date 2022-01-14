@@ -37,7 +37,7 @@ apt update
 apt install git -y
 mkdir /opt
 cd /opt
-git clone https://github.com/CaoCaoMiner/CC-Miner-Tax-Proxy.git
+git clone https://github.com/CC-MinerProxy/CC-MinerProxy/tree/master/linux.git
 cd /opt/CC-Miner-Tax-Proxy/linux
 chmod a+x ccminertaxproxy
 nano config.json
@@ -49,7 +49,7 @@ yum update
 yum install git -y
 mkdir /opt
 cd /opt
-git clone https://github.com/CaoCaoMiner/CC-Miner-Tax-Proxy.git
+git clone https://github.com/CC-MinerProxy/CC-MinerProxy/tree/master/linux.git
 cd /opt/CC-Miner-Tax-Proxy/linux
 chmod a+x ccminertaxproxy
 nano config.json
